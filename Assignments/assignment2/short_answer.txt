@@ -1,0 +1,40 @@
+Marriage Pact
+-------------
+
+Q1. It is your choice to use either an ordered or unordered set. In a few sentences, what are some of the tradeoffs between the two? Additionally, please give an example (that has not been shown in lecture) of a valid hash function that could be used to hash student names for an unordered set.
+A1. ordered set VS unordered set
+average time complexity
+insert: O(logN) O(1)
+find: O(logN) O(1)
+iterate: O(N)  O(N)
+if ordered: true false
+
+#include <string>
+#include <functional>
+#include <unordered_set>
+
+struct StudentNameHash
+{
+    std::size_t operator()(const std::string &name) const
+    {
+        std::size_t hash = 0;
+        const std::size_t prime = 31;
+
+        for (char c : name)
+        {
+            // Convert to lowercase for case-insensitive hashing
+            char lower_c = std::tolower(static_cast<unsigned char>(c));
+            hash = hash * prime + lower_c;
+        }
+
+        return hash;
+    }
+};
+
+int main() {
+    std::unordered_set<std::string, StudentNameHash> set;
+}
+
+Q2. Note that we are saving pointers to names in the queue, not names themselves. Why might this be desired in this problem? What happens if the original set where the names are stored goes out of scope and the pointers are referenced?
+A2. Memory Efficiency: Storing pointers avoids copying potentially large strings, which is more efficient when dealing with many names.
+    Direct Access: Pointers provide direct access to the original data in the set, so any updates to the set would be reflected (though const prevents modification).
