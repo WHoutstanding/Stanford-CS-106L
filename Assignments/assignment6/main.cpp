@@ -59,7 +59,7 @@ public:
      * type. */
     for (auto course: courses) {
       if (course.title == course_title) {
-        return course;
+        return { course };
       }
     }
     return std::nullopt;
@@ -69,8 +69,7 @@ private:
   std::vector<Course> courses;
 };
 
-int
-main(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
   static_assert(
     !std::is_same_v<std::invoke_result_t<decltype (&CourseDatabase::find_course), 
@@ -87,12 +86,23 @@ main(int argc, char* argv[])
     STUDENT_TODO: Populate the output string with the right information to print
     Please pay special attention to the README here
     ********************************************************/
-
-    std::string output = /* STUDENT_TODO */
+    std::string output = course
+        .and_then([](const Course& course) -> std::optional<std::string> {
+            return "Found course: " + course.title + "," + 
+                course.number_of_units + "," + course.quarter;
+        })
+        .value_or("Course not found.");
 
     /********************************************************
      DO NOT MODIFY ANYTHING BELOW THIS LINE PLEASE
     ********************************************************/
+    // std::string output = course
+    //     .and_then([](const Course& c) -> std::optional<std::string> {
+    //         return "Found course: " + c.title + "," +
+    //               c.number_of_units + "," + c.quarter;
+    //     })
+    //     .value_or("Course not found.");
+
 
     std::cout << output << std::endl;
     return 0;
